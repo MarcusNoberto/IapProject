@@ -1,0 +1,11 @@
+# Ignorar o diretório do ambiente virtual Python
+iapVenv/
+
+# Ignorar o diretório __pycache__ em qualquer nível do diretório
+__pycache__/
+
+# Ignorar arquivos .pyc (bytecode compilado) em qualquer nível do diretório
+*.pyc
+
+# Ignorar o arquivo db.sqlite3
+db.sqlite3
