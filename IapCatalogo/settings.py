@@ -39,12 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'iapApp',
     'rest_framework',
-    'django_filters'
+    'django_filters',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -107,6 +109,10 @@ REST_FRAMEWORK = {
 }
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    # Adicione outras origens permitidas aqui, se necessário
+]
 
 LANGUAGE_CODE = 'en-us'
 

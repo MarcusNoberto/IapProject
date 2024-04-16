@@ -8,6 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework import status
+import json
 
 import django_filters
 
@@ -64,20 +65,16 @@ class IAPListViewSet(viewsets.ReadOnlyModelViewSet):
 
         try:
             iap = IAP.objects.get(nome=iap_id, jogo__nome=jogo_nome)
-            print(iap)
         except IAP.DoesNotExist:
             return Response({'error': 'IAP not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        price_list = iap.price.split(';')
-        new_price_entry = f"{country}; {new_price}"
-        for i in range(0, len(price_list), 2):
-            if price_list[i].strip() == country:
-                price_list[i + 1] = new_price
-                break
+        price_dict = json.loads(iap.price)
+        if country in price_dict['en-US']['iapPrices']:
+            price_dict['en-US']['iapPrices'][country] = new_price
         else:
-            price_list.append(new_price_entry)
+            price_dict['en-US']['iapPrices'][country] = new_price
 
-        iap.price = '; '.join(price_list)
+        iap.price = json.dumps(price_dict)
         iap.save()
 
         return Response({'message': 'Price updated successfully'}, status=status.HTTP_200_OK)

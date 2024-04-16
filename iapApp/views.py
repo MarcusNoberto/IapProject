@@ -39,6 +39,8 @@ def process_data_files(request):
                     value = float(value) / 1000000
                     if not IAP.objects.filter(nome=iap_name, jogo=jogo).exists():
                         iap = IAP(nome=iap_name, valor_us=value, price=row['Price'], jogo=jogo)
+                        iap.trata_precos()
+                        iap.format_price()
                         iap.save()
     return HttpResponse("Data processed successfully")
 
