@@ -73,8 +73,9 @@ class IAPListViewSet(viewsets.ReadOnlyModelViewSet):
             price_dict['en-US']['iapPrices'][country] = new_price
         else:
             price_dict['en-US']['iapPrices'][country] = new_price
-
+        
         iap.price = json.dumps(price_dict)
         iap.save()
-
+        iap.trata_precos()
+        print(iap.iapPrices)
         return Response({'message': 'Price updated successfully'}, status=status.HTTP_200_OK)
