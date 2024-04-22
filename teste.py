@@ -4,8 +4,8 @@ import json
 url = 'http://127.0.0.1:8000/iaps/BattleTanks/setPrice/'
 payload = {
     'id': "com.fungames.battletanksbeta.hardpack5.coupon30usd",
-    'country': 'IE',
-    'new_price': '32.99'
+    'country': 'DZ',
+    'new_price': '50.44'
 }
 
 response = requests.post(url, data=json.dumps(payload), headers={'Content-Type': 'application/json'})

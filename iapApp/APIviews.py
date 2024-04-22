@@ -53,29 +53,43 @@ class IAPListViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         jogo_nome = self.kwargs['jogo_nome']
         return IAP.objects.filter(jogo__nome=jogo_nome)
-
+    
+    @staticmethod
+    def replace_single_quotes_with_double_quotes(json_str):
+        return json_str.replace("'", '"')
+    
+    @staticmethod
+    def replace_non_ascii_characters(s, replacement='_'):
+        return ''.join(c if ord(c) < 128 else replacement for c in s)
+    
+    
+    
     @action(detail=False, methods=['post'])
     def setPrice(self, request, jogo_nome=None):
-        iap_id = request.data.get('id')
+        iap_name = request.data.get('id')
         country = request.data.get('country')
         new_price = request.data.get('new_price')
 
-        if not iap_id or not country or not new_price:
+        if not iap_name or not country or not new_price:
             return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            iap = IAP.objects.get(nome=iap_id, jogo__nome=jogo_nome)
+            iap = IAP.objects.get(nome=iap_name, jogo__nome=jogo_nome)
         except IAP.DoesNotExist:
             return Response({'error': 'IAP not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        price_dict = json.loads(iap.price)
-        if country in price_dict['en-US']['iapPrices']:
-            price_dict['en-US']['iapPrices'][country] = new_price
-        else:
-            price_dict['en-US']['iapPrices'][country] = new_price
         
-        iap.price = json.dumps(price_dict)
+        price_str = self.replace_single_quotes_with_double_quotes(iap.price)
+        price_str = self.replace_non_ascii_characters(price_str)
+        print(price_str)
+        price_dict = json.loads(price_str)
+        
+
+        if country in price_dict['Prices']:
+            price_dict['Prices'][country]['PriceMicros'] = new_price
+        else:
+            print("Entrou aqui buceta")
+            return Response({'error': 'Country not found in prices'}, status=status.HTTP_404_NOT_FOUND)
+
+        iap.price = json.dumps(price_dict, ensure_ascii=False)
         iap.save()
-        iap.trata_precos()
-        print(iap.iapPrices)
         return Response({'message': 'Price updated successfully'}, status=status.HTTP_200_OK)

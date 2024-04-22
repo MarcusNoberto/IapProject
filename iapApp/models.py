@@ -32,8 +32,8 @@ class IAP(models.Model):
 
         formatted_data = {
             'DefaultLanguage': 'en-US',
-            'DefaultPrice': 0xc000090d70,
-            'GracePeriod': None,  # You might need to adjust this
+            'DefaultPrice': "0xc000090d70",
+            'GracePeriod': "None",
             'Listings': {
                 'en-US': {
                     'Benefits': [],
@@ -49,15 +49,15 @@ class IAP(models.Model):
             'PurchaseType': 'managedUser',
             'Sku': self.nome,
             'Status': 'active',
-            'SubscriptionPeriod': None,  # Adjust this as needed
-            'SubscriptionTaxesAndComplianceSettings': None,  # Adjust this as needed
-            'TrialPeriod': None,  # Adjust this as needed
+            'SubscriptionPeriod': "None",  # Adjust this as needed
+            'SubscriptionTaxesAndComplianceSettings': "None",  # Adjust this as needed
+            'TrialPeriod': "None",  # Adjust this as needed
             'ServerResponse': {
-                'HTTPStatusCode': 0,
-                'Header': {},
+                'HTTPStatusCode': "0",
+                'Header': "{}",
             },
-            'ForceSendFields': [],
-            'NullFields': [],
+            'ForceSendFields': "[]",
+            'NullFields': "[]",
         }
 
         self.price = formatted_data
